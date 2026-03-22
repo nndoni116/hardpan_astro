@@ -1,0 +1,161 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumb from '../components/common/Breadcrumb.astro';
+import { buildSeoMeta } from '../utils/seo';
+
+const seo = buildSeoMeta({
+  pageTitle: 'ハードパンについて',
+  description: '自家製酵母・石窯・国産小麦への3つのこだわり。金沢のパン屋「ハードパン」のコンセプトをご紹介します。',
+  path: '/about/',
+});
+
+const points = [
+  {
+    number: '01',
+    title: '自家製酵母',
+    body: '季節ごとに表情を変える自家製酵母。じっくり時間をかけて育てることで、市販の酵母では出せない奥行きのある香りと、ほのかな酸味を引き出します。噛むほどに広がる風味をお楽しみください。',
+    image: '/images/about/jikasei-koubo.jpg',
+    alt: '自家製酵母',
+    reverse: false,
+    bg: '/images/about/bg-flour.jpg',
+  },
+  {
+    number: '02',
+    title: '石窯での直火焼き',
+    body: '特注の石窯を使い、直火で一気に焼き上げます。遠赤外線効果によって、外側はバリッと香ばしく、内側には水分を閉じ込めて「もっちり」とした質感に。これこそがハード系パンの醍醐味です。',
+    image: '/images/about/ishigama.jpg',
+    alt: '石窯での直火焼き',
+    reverse: true,
+    bg: '/images/about/bg-wood.jpg',
+  },
+  {
+    number: '03',
+    title: '国産小麦の選定',
+    body: '日本各地の農家から直接届く小麦。その年、その時期に最も美味しい品種を厳選し、パンの種類に合わせて配合を変えています。保存料は一切使わず、素材本来の「力強い甘み」を追求しています。',
+    image: '/images/about/wheat.jpg',
+    alt: '国産小麦の選定',
+    reverse: false,
+    bg: '/images/about/bg-breads.jpg',
+  },
+];
+---
+
+<BaseLayout {...seo}>
+  <Breadcrumb items={[{ label: 'ハードパンについて', href: '/about/' }]} />
+
+  <!-- ヒーロー -->
+  <div class="relative w-full h-[30vh] overflow-hidden bg-[#2c2c2c]">
+    <img src="/images/about/hero.jpg" alt="パン作りの風景" class="w-full h-full object-cover brightness-[0.7]" width="1920" height="600" loading="lazy" />
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-white text-center">
+      <h1 class="text-[28px] tracking-[0.2em]">ハードパンについて</h1>
+      <p class="text-[12px] uppercase tracking-[0.2em] mt-1">ABOUT</p>
+    </div>
+  </div>
+
+  <!-- コンセプト -->
+  <section class="bg-white py-[120px] text-center fade-in max-md:py-[60px]" aria-label="コンセプト">
+    <div class="max-w-[1050px] mx-auto px-5">
+      <p class="leading-[2.2] text-sub2 text-[15px] max-md:text-[14px] max-md:leading-[2]">
+        当店のパン作りは、朝一番の粉の温度を測ることから始まります。<br class="max-md:hidden" />
+        使用するのは、私たちが信頼する農家さんから届く国産小麦と、創業時から大切に育ててきた自家製酵母。<br class="max-md:hidden" />
+        派手さはありませんが、飽きのこない、嘘のないパン作りを続けています。
+      </p>
+    </div>
+  </section>
+
+  <!-- 3つのこだわり -->
+  <div aria-label="3つのこだわり">
+    {points.map((point) => (
+      <div
+        class="py-[120px] bg-cover bg-center bg-fixed relative before:content-[''] before:absolute before:inset-0 before:bg-black/20 before:z-[1] max-md:py-[60px] max-md:bg-scroll"
+        style={`background-image: url('${point.bg}')`}
+      >
+        <div
+          class:list={[
+            'max-w-[1050px] mx-auto px-10 flex items-center gap-[60px] relative z-[2] max-md:flex-col max-md:gap-8 max-md:px-5',
+            point.reverse ? 'flex-row-reverse' : '',
+          ]}
+        >
+          <div class="flex-1">
+            <img
+              src={point.image}
+              alt={point.alt}
+              class="w-full h-[400px] object-cover shadow-[20px_20px_0_rgba(44,44,44,0.8)] max-md:h-[250px]"
+              width="480"
+              height="400"
+              loading="lazy"
+            />
+          </div>
+          <div class="flex-1 bg-white/90 p-[50px] backdrop-blur-[5px] max-md:p-8">
+            <span class="block text-[40px] text-[#ccc] font-serif italic mb-2">{point.number}</span>
+            <h2 class="text-[22px] text-[#2c2c2c] border-b-2 border-[#2c2c2c] inline-block pb-1 mb-5">{point.title}</h2>
+            <p class="text-[15px] text-[#444] leading-[1.8]">{point.body}</p>
+          </div>
+        </div>
+      </div>
+    ))}
+  </div>
+
+  <!-- イートインスペース -->
+  <section class="bg-main py-[80px] fade-in max-md:py-[60px]" aria-label="イートインスペース">
+    <div class="max-w-[1050px] mx-auto px-5">
+      <div class="flex flex-col items-center text-center mb-5">
+        <h2 class="text-[1.8rem] tracking-[0.1em] text-text m-0">イートインスペース</h2>
+        <p class="text-[0.9rem] uppercase tracking-[0.3em] text-text2 mt-2">Eat-in Space</p>
+      </div>
+
+      <div class="max-w-[500px] mx-auto p-[15px] bg-white shadow-[0_10px_25px_rgba(0,0,0,0.08)] border border-[#ddd] mb-5">
+        <img
+          src="/images/about/eatin.jpg"
+          alt="イートインスペースの店内風景"
+          class="w-full h-auto block [filter:sepia(10%)_contrast(105%)]"
+          width="470"
+          height="320"
+          loading="lazy"
+        />
+      </div>
+
+      <div class="text-center mb-[60px]">
+        <p class="text-[16px] leading-[2] text-sub2 mb-5">焼きたてのパンをその場でお楽しみいただける、<br class="max-md:hidden" />開放的なカフェスペースをご用意しております。</p>
+        <p class="text-[16px] leading-[2] text-sub2">風が心地よいテラス席では、ペット連れでの休憩も可能です。<br class="max-md:hidden" />こだわりの自家焙煎コーヒーとともに、ゆったりとしたひとときをお過ごしください。</p>
+      </div>
+
+      <dl class="max-w-[700px] mx-auto border-t border-dotted border-[#ccc] pt-5">
+        {[
+          { dt: 'ランチタイム', dd: '11:30 — 14:30 (L.O. 14:00)' },
+          { dt: '利用可能時間', dd: '08:00 — 17:00' },
+          { dt: '座席数', dd: '12席（テーブル 8席 / テラス 4席）' },
+          { dt: '備考', dd: '無料Wi-Fi完備 / コンセント利用可' },
+        ].map(({ dt, dd }) => (
+          <div class="flex justify-between py-[15px] border-b border-[#f0f0f0]">
+            <dt class="font-bold text-text">{dt}</dt>
+            <dd class="text-text3">{dd}</dd>
+          </div>
+        ))}
+      </dl>
+    </div>
+  </section>
+
+  <!-- 会社概要 -->
+  <section class="py-[100px] fade-in max-md:py-[60px]" aria-label="会社概要">
+    <div class="max-w-[1050px] mx-auto px-5">
+      <div class="flex flex-col items-center text-center mb-10">
+        <h2 class="text-[1.8rem] tracking-[0.1em] text-text m-0">会社概要</h2>
+        <p class="text-[0.9rem] uppercase tracking-[0.3em] text-text2 mt-2">Company Overview</p>
+      </div>
+      <dl class="max-w-[700px] mx-auto">
+        {[
+          { dt: '会社名', dd: '株式会社 ハードパン' },
+          { dt: '設立', dd: '2024年4月' },
+          { dt: '代表者', dd: '代表取締役 山田 髙志' },
+          { dt: '事業内容', dd: '製パンの製造・販売、カフェ運営、自家焙煎コーヒーの卸売' },
+        ].map(({ dt, dd }) => (
+          <div class="flex border-b border-[#ddd] py-4 gap-8 max-md:flex-col max-md:gap-1">
+            <dt class="w-[120px] font-bold text-text shrink-0">{dt}</dt>
+            <dd class="text-text3">{dd}</dd>
+          </div>
+        ))}
+      </dl>
+    </div>
+  </section>
+</BaseLayout>

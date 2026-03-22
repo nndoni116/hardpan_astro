@@ -1,0 +1,51 @@
+---
+export interface BreadcrumbItem {
+  label: string;
+  href?: string;
+}
+
+interface Props {
+  items: BreadcrumbItem[];
+}
+
+const { items } = Astro.props;
+const siteUrl = import.meta.env.PUBLIC_SITE_URL ?? 'https://hardpan.example.com';
+
+const jsonLdItems = [
+  { name: 'ホーム', href: '/' },
+  ...items,
+].map((item, i) => ({
+  '@type': 'ListItem',
+  position: i + 1,
+  name: item.label ?? 'ホーム',
+  item: item.href ? `${siteUrl}${item.href}` : undefined,
+}));
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: jsonLdItems,
+};
+---
+
+<!-- 視覚的パンくずリスト -->
+<nav aria-label="パンくずリスト" class="py-3 px-5 text-[13px] text-text3">
+  <ol class="flex flex-wrap gap-1 list-none">
+    <li>
+      <a href="/" class="hover:text-text2 transition-colors duration-300">ホーム</a>
+    </li>
+    {items.map(({ label, href }, i) => (
+      <li class="flex items-center gap-1">
+        <span aria-hidden="true" class="text-text2">/</span>
+        {href && i < items.length - 1 ? (
+          <a href={href} class="hover:text-text2 transition-colors duration-300">{label}</a>
+        ) : (
+          <span aria-current="page">{label}</span>
+        )}
+      </li>
+    ))}
+  </ol>
+</nav>
+
+<!-- JSON-LD 構造化データ -->
+<script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />

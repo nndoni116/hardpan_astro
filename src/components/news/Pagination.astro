@@ -1,0 +1,45 @@
+---
+interface Props {
+  currentPage: number;
+  totalPages: number;
+  basePath: string;
+}
+const { currentPage, totalPages, basePath } = Astro.props;
+---
+
+{totalPages > 1 && (
+  <nav aria-label="ページネーション" class="flex justify-center gap-2 mt-10">
+    {currentPage > 1 && (
+      <a
+        href={currentPage === 2 ? `${basePath}` : `${basePath}?page=${currentPage - 1}`}
+        class="px-4 py-2 border border-sub2 text-text text-[13px] hover:bg-sub2 hover:text-white transition-colors duration-300"
+      >
+        &laquo; 前へ
+      </a>
+    )}
+
+    {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+      <a
+        href={page === 1 ? `${basePath}` : `${basePath}?page=${page}`}
+        class:list={[
+          'px-4 py-2 border text-[13px] transition-colors duration-300',
+          page === currentPage
+            ? 'bg-sub2 text-white border-sub2'
+            : 'border-sub2 text-text hover:bg-sub2 hover:text-white',
+        ]}
+        aria-current={page === currentPage ? 'page' : undefined}
+      >
+        {page}
+      </a>
+    ))}
+
+    {currentPage < totalPages && (
+      <a
+        href={`${basePath}?page=${currentPage + 1}`}
+        class="px-4 py-2 border border-sub2 text-text text-[13px] hover:bg-sub2 hover:text-white transition-colors duration-300"
+      >
+        次へ &raquo;
+      </a>
+    )}
+  </nav>
+)}

@@ -1,0 +1,25 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { buildSeoMeta } from '../../utils/seo';
+
+const seo = buildSeoMeta({
+  pageTitle: 'お問い合わせ完了',
+  description: 'お問い合わせを受け付けました。',
+  path: '/contact/thanks/',
+  noindex: true,
+});
+---
+
+<BaseLayout {...seo}>
+  <section class="min-h-[60vh] flex flex-col items-center justify-center py-[100px] px-5 text-center">
+    <h1 class="text-[28px] font-bold text-text mb-6">お問い合わせありがとうございます</h1>
+    <p class="text-[15px] text-text3 leading-[2] mb-10">
+      お問い合わせを受け付けました。<br />
+      内容を確認の上、担当者よりご連絡いたします。<br />
+      しばらくお待ちください。
+    </p>
+    <a href="/" class="inline-block border border-[#444] px-8 py-[10px] text-[13px] hover:bg-sub2 hover:text-white transition-colors duration-300">
+      トップページへ戻る
+    </a>
+  </section>
+</BaseLayout>

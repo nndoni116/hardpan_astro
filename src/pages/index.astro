@@ -1,0 +1,233 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { buildSeoMeta, SITE_URL } from '../utils/seo';
+import { getNewsList } from '../lib/microcms';
+import { formatDate, toDatetimeAttr } from '../utils/date';
+import { menuItems } from '../data/menu';
+
+const seo = buildSeoMeta({
+  description: '石川県金沢市のハード系パン専門店。自家製酵母と国産小麦にこだわり、石窯で焼き上げた本格パンをお届けします。',
+  path: '/',
+});
+
+// NEWS最新3件取得
+const newsData = await getNewsList({ limit: 3, orders: '-publishedAt' });
+const newsItems = newsData.contents;
+
+// NEW ARRIVALメニュー3件
+const newArrivalItems = menuItems.filter((m) => m.category === 'NEW_ARRIVAL').slice(0, 3);
+
+// JSON-LD: LocalBusiness
+const localBusinessSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Bakery',
+  name: 'ハードパン',
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: '〇〇町 1-2-3',
+    addressLocality: '金沢市',
+    addressRegion: '石川県',
+    postalCode: '000-0000',
+    addressCountry: 'JP',
+  },
+  telephone: '076-000-0000',
+  openingHours: ['Tu-Sa 08:00-18:00'],
+  url: SITE_URL,
+  priceRange: '¥〜¥¥',
+};
+---
+
+<BaseLayout {...seo} headerVariant="top" jsonLd={localBusinessSchema}>
+  <!-- メインビジュアル（スライドショー） -->
+  <section class="relative w-full h-[75vh] overflow-hidden bg-white" aria-label="メインビジュアル">
+    <link rel="preload" as="image" href="/images/slide1.jpg" fetchpriority="high" />
+
+    <div class="slide absolute inset-0 opacity-0 transition-opacity scale-100" data-slide>
+      <img src="/images/slide1.jpg" alt="店舗外観" class="w-full h-full object-cover" width="1920" height="1080" fetchpriority="high" />
+    </div>
+    <div class="slide absolute inset-0 opacity-0 transition-opacity scale-100" data-slide>
+      <img src="/images/slide2.jpg" alt="パンが並んでいる写真" class="w-full h-full object-cover" width="1920" height="1080" loading="lazy" />
+    </div>
+    <div class="slide absolute inset-0 opacity-0 transition-opacity scale-100" data-slide>
+      <img src="/images/slide3.jpg" alt="パンの写真" class="w-full h-full object-cover" width="1920" height="1080" loading="lazy" />
+    </div>
+
+    <!-- キャッチコピー -->
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-white z-10 text-center">
+      <p class="text-[24px] tracking-[0.3em] font-light border-b border-white/50 pb-3 max-md:text-[18px]">
+        日常の主役となるパンを
+      </p>
+    </div>
+  </section>
+
+  <!-- スライドショーJS -->
+  <script>
+    const slides = document.querySelectorAll<HTMLElement>('[data-slide]');
+    let current = 0;
+
+    function showSlide(index: number) {
+      slides.forEach((s, i) => {
+        if (i === index) {
+          s.style.opacity = '1';
+          s.style.transform = 'scale(1.1)';
+          s.style.transition = 'opacity 2.5s ease-in-out, transform 8s linear';
+        } else {
+          s.style.opacity = '0';
+          s.style.transform = 'scale(1)';
+          s.style.transition = 'opacity 2.5s ease-in-out, transform 12s linear';
+        }
+      });
+    }
+
+    showSlide(0);
+    setInterval(() => {
+      current = (current + 1) % slides.length;
+      showSlide(current);
+    }, 5000);
+  </script>
+
+  <!-- NEWSセクション -->
+  <section class="w-full bg-sub py-5" aria-label="お知らせ">
+    <div class="max-w-[1050px] mx-auto px-10 flex items-center justify-between gap-6 max-md:flex-col max-md:items-start max-md:px-5">
+      <div class="flex flex-col items-center shrink-0 pr-8 max-md:items-start max-md:pr-0 max-md:border-b max-md:border-dotted max-md:border-[#ccc] max-md:w-full max-md:pb-3">
+        <h2 class="text-[18px] text-[#777] font-medium tracking-[0.1em] whitespace-nowrap">お知らせ</h2>
+        <p class="text-[10px] text-[#aaa] tracking-[0.1em] uppercase">news</p>
+      </div>
+
+      <ul class="flex-1 list-none max-md:w-full">
+        {newsItems.map((item) => (
+          <li class="flex gap-4 py-[15px] px-5 text-[14px] max-md:px-0 max-md:py-[10px]">
+            <time datetime={toDatetimeAttr(item.publishedAt)} class="w-[100px] text-[#999] shrink-0">
+              {formatDate(item.publishedAt)}
+            </time>
+            <span class="bg-[#666] text-white text-[10px] px-2 py-[2px] rounded-[2px] mr-4 shrink-0 self-center">
+              {item.category}
+            </span>
+            <a href={`/news/${item.slug}/`} class="hover:text-text2 transition-colors duration-300">
+              {item.title}
+            </a>
+          </li>
+        ))}
+      </ul>
+
+      <div class="hidden md:block w-0 self-stretch border-l-2 border-dotted border-white mx-5"></div>
+      <a href="/news/" class="text-[12px] text-[#888] underline shrink-0 whitespace-nowrap self-center">
+        一覧を見る
+      </a>
+    </div>
+  </section>
+
+  <!-- ABOUTセクション -->
+  <section id="about" class="bg-main2 mb-[120px] max-md:mb-[60px]" aria-label="ハードパンについて">
+    <div class="max-w-[1050px] mx-auto py-[50px] px-5 text-center relative fade-in">
+      <h2 class="text-text text-[28px] tracking-[0.1em]">ハードパンについて</h2>
+      <p class="text-[10px] text-text2 uppercase tracking-[0.1em] mt-0 mb-0">about</p>
+      <div class="mt-8 mb-12">
+        <p class="text-[15px] text-text3 leading-[2] max-md:text-[14px] max-md:text-left">
+          当店が焼き上げるのは、自家製酵母と厳選した国産小麦、そして塩と水のみで作り上げるシンプルなハード系パンです。<br class="max-md:hidden" />
+          長時間じっくりと低温熟成させることで、外側はバリッと香ばしく、内側は驚くほどもっちりとした質感に仕上げました。<br class="max-md:hidden" />
+          毎日の食卓に、力強い小麦の味わいを添える一杯のワインやスープのような、そんな「日常の主役」となるパンをお届けします。
+        </p>
+      </div>
+      <a href="/about/" class="inline-block border border-[#444] px-8 py-[10px] text-[13px] hover:bg-sub2 hover:text-white transition-colors duration-300">
+        こだわりについて
+      </a>
+    </div>
+  </section>
+
+  <!-- 新商品セクション -->
+  <section class="max-w-[1200px] mx-auto px-5 text-center mb-[120px] max-md:mb-[60px] fade-in" aria-label="新商品">
+    <h2 class="text-text text-[28px] tracking-[0.1em]">新商品</h2>
+    <p class="text-[10px] text-text2 uppercase tracking-[0.1em] mt-0 mb-8">NEW ARRIVAL</p>
+
+    <div class="grid grid-cols-3 gap-[40px_30px] mt-8 mb-12 max-md:grid-cols-1 max-md:gap-10">
+      {newArrivalItems.map((item) => (
+        <article class="text-center">
+          <img
+            src={item.imagePath}
+            alt={item.name}
+            class="w-[60%] aspect-square object-cover rounded-lg mx-auto mb-4 brightness-95 shadow-sm max-md:w-full max-md:max-w-[300px]"
+            width="300"
+            height="300"
+            loading="lazy"
+          />
+          <h3 class="text-[16px] text-text mb-1">{item.name}</h3>
+          {item.description && <p class="text-[14px] text-text3">{item.description}</p>}
+        </article>
+      ))}
+    </div>
+
+    <a href="/menu/" class="inline-block px-10 py-3 border border-[#ccc] text-[#666] text-[13px] tracking-[0.1em] hover:bg-[#444] hover:text-white hover:border-[#444] transition-all duration-300">
+      すべてのメニュー
+    </a>
+  </section>
+
+  <!-- イートインセクション -->
+  <section class="bg-white py-[100px] mb-0 max-md:py-[60px]" aria-label="イートインスペース">
+    <div class="max-w-[1050px] mx-auto px-10 flex items-center gap-[60px] max-md:flex-col max-md:gap-[30px] max-md:px-5 fade-in">
+      <div class="flex-1">
+        <img
+          src="/images/eatin.jpg"
+          alt="イートインスペースの店内風景"
+          class="w-[90%] h-[350px] object-cover rounded-[4px] shadow-[15px_15px_0_#e9ecef] max-md:w-full max-md:h-[250px] max-md:shadow-[10px_10px_0_#e9ecef]"
+          width="480"
+          height="350"
+          loading="lazy"
+        />
+      </div>
+      <div class="flex-1">
+        <h2 class="text-left text-[24px] text-text mb-1 max-md:text-[20px]">イートインスペース</h2>
+        <p class="text-[10px] text-text2 uppercase tracking-[0.1em] mb-8">Eat-in Space</p>
+        <div class="text-[15px] text-[#555] leading-[2] space-y-5">
+          <p>焼きたてのパンをその場でお楽しみいただける、<br class="max-md:hidden" />開放的なカフェスペースをご用意しております。</p>
+          <p>こだわりの自家焙煎コーヒーとともに、<br class="max-md:hidden" />ゆったりとした朝のひとときやランチタイムをお過ごしください。</p>
+        </div>
+        <ul class="list-none mt-8 pt-5 border-t border-[#eee] space-y-2">
+          <li class="text-[14px] text-[#777]"><span class="font-bold text-[#444]">座席数：</span>12席（テラス席あり）</li>
+          <li class="text-[14px] text-[#777]"><span class="font-bold text-[#444]">設備：</span>Free Wi-Fi / コンセント完備</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 店舗情報セクション -->
+  <section class="bg-[#e9ecef] py-[100px] max-md:py-[60px]" aria-label="店舗情報">
+    <div class="max-w-[1050px] mx-auto px-10 flex gap-[60px] items-start max-md:flex-col max-md:gap-10 max-md:px-5 fade-in">
+      <div class="flex-1">
+        <h2 class="text-left text-[24px] text-[#444] mb-1">店舗情報</h2>
+        <p class="text-[10px] text-text2 uppercase tracking-[0.1em] mb-0">Shop Information</p>
+        <dl class="mt-10">
+          {[
+            { dt: '店名', dd: 'ハードパン' },
+            { dt: '営業時間', dd: '8:00〜18:00（完売次第終了）' },
+            { dt: '定休日', dd: '日曜日・月曜日' },
+            { dt: '住所', dd: '〒000-0000\n石川県金沢市〇〇町 1-2-3' },
+            { dt: '電話番号', dd: '076-000-0000' },
+          ].map(({ dt, dd }) => (
+            <div class="flex border-b border-[#d1d4d7] py-[15px] max-md:flex-col max-md:gap-1">
+              <dt class="w-[120px] font-bold text-[#555] text-[14px] shrink-0 max-md:w-full">{dt}</dt>
+              <dd class="flex-1 text-[#666] text-[15px] leading-[1.6] whitespace-pre-line max-md:pl-[10px]">{dd}</dd>
+            </div>
+          ))}
+        </dl>
+        <div class="mt-5 text-[13px] text-[#888] space-y-1">
+          <p>※駐車場 5台完備（店舗裏手）</p>
+          <p>※金沢駅から徒歩10分</p>
+        </div>
+      </div>
+
+      <div class="flex-[1.2] grayscale-[30%] rounded-[8px] overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.05)]">
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3202.825832703!2d136.6457123!3d36.5626084!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzbCsDMzJzQ1LjQiTiAxMzbaseAwOCczNC42IkU!5e0!3m2!1sja!2sjp!4v1234567890"
+          width="100%"
+          height="450"
+          style="border:0;"
+          allowfullscreen
+          loading="lazy"
+          title="ハードパン 地図"
+          class="max-md:h-[300px]"
+        ></iframe>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

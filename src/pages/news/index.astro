@@ -1,0 +1,49 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumb from '../../components/common/Breadcrumb.astro';
+import NewsCard from '../../components/news/NewsCard.astro';
+import Pagination from '../../components/news/Pagination.astro';
+import { buildSeoMeta } from '../../utils/seo';
+import { getNewsList } from '../../lib/microcms';
+
+const LIMIT = 10;
+const page = Number(Astro.url.searchParams.get('page') ?? '1');
+const offset = (page - 1) * LIMIT;
+
+const data = await getNewsList({ limit: LIMIT, offset, orders: '-publishedAt' });
+const totalPages = Math.ceil(data.totalCount / LIMIT);
+
+const seo = buildSeoMeta({
+  pageTitle: 'お知らせ',
+  description: 'ハードパンからの最新情報・お知らせ一覧です。',
+  path: '/news/',
+});
+---
+
+<BaseLayout {...seo}>
+  <Breadcrumb items={[{ label: 'お知らせ', href: '/news/' }]} />
+
+  <div class="relative w-full h-[30vh] overflow-hidden bg-[#2c2c2c]">
+    <img src="/images/news/hero.jpg" alt="お知らせ" class="w-full h-full object-cover brightness-[0.7]" width="1920" height="600" loading="lazy" />
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-white text-center">
+      <h1 class="text-[28px] tracking-[0.2em]">お知らせ</h1>
+      <p class="text-[12px] uppercase tracking-[0.2em] mt-1">NEWS</p>
+    </div>
+  </div>
+
+  <section class="py-[80px] fade-in max-md:py-[60px]" aria-label="お知らせ一覧">
+    <div class="max-w-[800px] mx-auto px-5">
+      {data.contents.length > 0 ? (
+        <ul class="list-none">
+          {data.contents.map((article) => (
+            <NewsCard article={article} />
+          ))}
+        </ul>
+      ) : (
+        <p class="text-center text-text3 py-20">現在お知らせはありません。</p>
+      )}
+
+      <Pagination currentPage={page} totalPages={totalPages} basePath="/news/" />
+    </div>
+  </section>
+</BaseLayout>

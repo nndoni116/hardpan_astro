@@ -1,0 +1,47 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumb from '../components/common/Breadcrumb.astro';
+import { buildSeoMeta } from '../utils/seo';
+
+const seo = buildSeoMeta({
+  pageTitle: 'プライバシーポリシー',
+  description: 'ハードパンの個人情報の取り扱いについて説明しています。',
+  path: '/privacy/',
+});
+---
+
+<BaseLayout {...seo}>
+  <Breadcrumb items={[{ label: 'プライバシーポリシー', href: '/privacy/' }]} />
+
+  <section class="fade-in" aria-label="プライバシーポリシー">
+    <div class="max-w-[800px] mx-auto px-5 py-[100px] max-md:py-[60px]">
+      <h1 class="text-[28px] mb-10 text-center max-md:text-[22px] max-md:mb-8">プライバシーポリシー</h1>
+
+      <p class="leading-[1.8] text-[#555] mb-[15px]">
+        ハードパン（以下、「当店」といいます。）は、本ウェブサイト上で提供するサービスにおける、ユーザーの個人情報の取扱いについて、以下のとおりプライバシーポリシーを定めます。
+      </p>
+
+      <h2 class="text-[20px] mt-10 mb-5 border-b border-[#ddd] pb-[10px] max-md:text-[18px] max-md:mt-8">1. 個人情報の収集方法</h2>
+      <p class="leading-[1.8] text-[#555] mb-[15px]">
+        当店は、ユーザーがお問い合わせフォームを利用する際に、氏名・住所・電話番号・メールアドレスなどの個人情報をお尋ねすることがあります。
+      </p>
+
+      <h2 class="text-[20px] mt-10 mb-5 border-b border-[#ddd] pb-[10px] max-md:text-[18px] max-md:mt-8">2. 個人情報の利用目的</h2>
+      <p class="leading-[1.8] text-[#555] mb-[15px]">当店が個人情報を収集・利用する目的は、以下のとおりです。</p>
+      <ul class="list-disc pl-6 text-[#555] leading-[1.8] mb-[15px]">
+        <li class="mb-[10px]">お問い合わせに対する回答のため</li>
+        <li class="mb-[10px]">当店のサービスに関する重要なご案内のため</li>
+      </ul>
+
+      <h2 class="text-[20px] mt-10 mb-5 border-b border-[#ddd] pb-[10px] max-md:text-[18px] max-md:mt-8">3. 個人情報の第三者提供</h2>
+      <p class="leading-[1.8] text-[#555] mb-[15px]">
+        当店は、法令に基づき開示することが必要である場合を除き、個人情報を第三者に提供することはありません。
+      </p>
+
+      <h2 class="text-[20px] mt-10 mb-5 border-b border-[#ddd] pb-[10px] max-md:text-[18px] max-md:mt-8">4. お問い合わせ</h2>
+      <p class="leading-[1.8] text-[#555] mb-[15px]">
+        本ポリシーに関するお問い合わせは、<a href="/contact/" class="underline hover:text-text2 transition-colors duration-300">お問い合わせフォーム</a>よりご連絡ください。
+      </p>
+    </div>
+  </section>
+</BaseLayout>

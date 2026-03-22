@@ -1,0 +1,27 @@
+---
+import { formatDate, toDatetimeAttr } from '../../utils/date';
+import type { NewsArticle } from '../../types/microcms';
+
+interface Props {
+  article: NewsArticle;
+}
+const { article } = Astro.props;
+---
+
+<li class="border-b border-sub last:border-none">
+  <a
+    href={`/news/${article.slug}/`}
+    class="flex gap-4 py-4 px-2 hover:bg-main transition-colors duration-300 items-start"
+  >
+    <time
+      datetime={toDatetimeAttr(article.publishedAt)}
+      class="text-[13px] text-text2 w-[90px] shrink-0 pt-[2px]"
+    >
+      {formatDate(article.publishedAt)}
+    </time>
+    <span class="text-[10px] bg-[#666] text-white px-2 py-[2px] rounded-[2px] shrink-0 mt-[3px]">
+      {article.category}
+    </span>
+    <span class="text-[14px] text-text leading-relaxed">{article.title}</span>
+  </a>
+</li>

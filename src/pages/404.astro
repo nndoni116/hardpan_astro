@@ -1,0 +1,29 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { buildSeoMeta } from '../utils/seo';
+
+const seo = buildSeoMeta({
+  pageTitle: 'ページが見つかりません',
+  description: 'お探しのページは見つかりませんでした。',
+  path: '/404',
+  noindex: true,
+});
+---
+
+<BaseLayout {...seo}>
+  <section class="min-h-[60vh] flex flex-col items-center justify-center py-[100px] px-5 text-center">
+    <p class="text-[80px] font-light text-text2 mb-4 leading-none">404</p>
+    <h1 class="text-[24px] font-bold text-text mb-6">ページが見つかりません</h1>
+    <p class="text-[15px] text-text3 leading-[2] mb-10">
+      お探しのページは削除されたか、URLが変更された可能性があります。
+    </p>
+    <div class="flex gap-4 flex-wrap justify-center">
+      <a href="/" class="inline-block border border-[#444] px-8 py-[10px] text-[13px] hover:bg-sub2 hover:text-white transition-colors duration-300">
+        トップページへ
+      </a>
+      <a href="/news/" class="inline-block border border-[#ccc] px-8 py-[10px] text-[13px] text-text3 hover:bg-sub2 hover:text-white hover:border-sub2 transition-colors duration-300">
+        お知らせ一覧へ
+      </a>
+    </div>
+  </section>
+</BaseLayout>

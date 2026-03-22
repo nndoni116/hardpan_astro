@@ -1,0 +1,77 @@
+---
+const navItems = [
+  { href: '/about/', label: 'ハードパンについて' },
+  { href: '/news/', label: 'お知らせ' },
+  { href: '/menu/', label: '商品一覧' },
+  { href: '/contact/', label: 'お問い合わせ' },
+  { href: '/shop-info/', label: '店舗情報' },
+  { href: '/privacy/', label: 'プライバシーポリシー' },
+];
+---
+
+<footer class="bg-sub text-text pt-10 pb-10 border-t border-black/5">
+  <div class="max-w-[1050px] mx-auto px-5 flex flex-col items-center text-center">
+    <!-- 店舗名 -->
+    <h2 class="font-serif text-[28px] tracking-[0.2em] text-text mb-5">
+      <a href="/" class="hover:text-text2 transition-colors duration-300">ハードパン</a>
+    </h2>
+
+    <!-- 住所・電話 -->
+    <div class="mb-2">
+      <p class="text-[14px] leading-[1.8] tracking-[0.05em]">〒000-0000 石川県金沢市〇〇町1-2-3</p>
+      <p class="text-[14px] leading-[1.8] tracking-[0.05em]">TEL: 076-000-0000</p>
+    </div>
+
+    <!-- サイトマップ -->
+    <nav aria-label="フッターナビゲーション" class="w-full border-t border-b border-dotted border-text/20 py-6 mb-3">
+      <ul class="flex justify-center flex-wrap gap-[30px] list-none max-md:flex-col max-md:gap-[15px]">
+        {navItems.map(({ href, label }) => (
+          <li>
+            <a
+              href={href}
+              class="text-[13px] font-bold tracking-[0.1em] text-text hover:text-text2 transition-colors duration-300 no-underline"
+            >
+              {label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    <!-- SNSリンク -->
+    <div class="flex gap-10 mb-12 max-md:gap-6 max-md:mb-8">
+      <a
+        href="#"
+        aria-label="Instagram"
+        rel="noopener noreferrer"
+        target="_blank"
+        class="text-[12px] text-text uppercase tracking-[0.15em] hover:text-text2 transition-colors duration-300"
+      >
+        Instagram
+      </a>
+      <a
+        href="#"
+        aria-label="X (旧Twitter)"
+        rel="noopener noreferrer"
+        target="_blank"
+        class="text-[12px] text-text uppercase tracking-[0.15em] hover:text-text2 transition-colors duration-300"
+      >
+        X
+      </a>
+      <a
+        href="#"
+        aria-label="YouTube"
+        rel="noopener noreferrer"
+        target="_blank"
+        class="text-[12px] text-text uppercase tracking-[0.15em] hover:text-text2 transition-colors duration-300"
+      >
+        YouTube
+      </a>
+    </div>
+
+    <!-- コピーライト -->
+    <p class="text-[10px] text-[#999] tracking-[0.05em]">
+      &copy; 2026 Gemini Bakery. All Rights Reserved.
+    </p>
+  </div>
+</footer>

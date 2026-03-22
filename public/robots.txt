@@ -1,0 +1,6 @@
+User-agent: *
+Disallow: /contact/thanks/
+Disallow: /api/
+Disallow: /
+
+Sitemap: https://hardpan.example.com/sitemap-index.xml

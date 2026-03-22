@@ -1,0 +1,109 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumb from '../../components/common/Breadcrumb.astro';
+import { buildSeoMeta } from '../../utils/seo';
+
+const seo = buildSeoMeta({
+  pageTitle: 'お問い合わせ',
+  description: 'ハードパンへのお問い合わせはこちら。商品・取材・予約のご相談をお受けしております。',
+  path: '/contact/',
+});
+---
+
+<BaseLayout {...seo}>
+  <Breadcrumb items={[{ label: 'お問い合わせ', href: '/contact/' }]} />
+
+  <div class="relative w-full h-[30vh] overflow-hidden bg-[#2c2c2c]">
+    <img src="/images/contact/hero.jpg" alt="お問い合わせ" class="w-full h-full object-cover brightness-[0.7]" width="1920" height="600" loading="lazy" />
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-white text-center">
+      <h1 class="text-[28px] tracking-[0.2em]">お問い合わせ</h1>
+      <p class="text-[12px] uppercase tracking-[0.2em] mt-1">CONTACT</p>
+    </div>
+  </div>
+
+  <section class="py-[100px] bg-white fade-in max-md:py-[60px]" aria-label="お問い合わせフォーム">
+    <div class="max-w-[1050px] mx-auto px-5">
+      <p class="text-center mb-[60px] leading-[2] text-[#555] max-md:mb-10 max-md:text-left">
+        商品に関するご質問や、取材・ご予約のご相談などは、<br class="max-md:hidden" />
+        下記フォームよりお気軽にお問い合わせください。
+      </p>
+
+      <!-- ダミーフォーム（送信処理なし） -->
+      <form action="#" method="post" class="max-w-[700px] mx-auto" id="contact-form" novalidate>
+
+        <!-- ハニーポットフィールド（ボット対策） -->
+        <div style="display:none;" aria-hidden="true">
+          <label for="hp-field">このフィールドは入力しないでください</label>
+          <input type="text" id="hp-field" name="_honeypot" tabindex="-1" autocomplete="off" />
+        </div>
+
+        {[
+          { id: 'name', label: 'お名前', type: 'text', placeholder: '例：山田 太郎', required: true },
+          { id: 'kana', label: 'フリガナ', type: 'text', placeholder: '例：ヤマダ タロウ', required: true },
+          { id: 'email', label: 'メールアドレス', type: 'email', placeholder: 'example@mail.com', required: true },
+        ].map(({ id, label, type, placeholder, required }) => (
+          <div class="mb-[30px]">
+            <label for={id} class="block font-bold text-[14px] mb-[10px] text-[#2c2c2c]">
+              {label}
+              {required && (
+                <span class="text-[10px] bg-[#2c2c2c] text-white px-[6px] py-[2px] ml-2 align-middle">必須</span>
+              )}
+            </label>
+            <input
+              type={type}
+              id={id}
+              name={id}
+              placeholder={placeholder}
+              required={required}
+              class="w-full p-[15px] border border-[#ddd] bg-[#fcfcfc] text-[16px] transition-all duration-300 focus:outline-none focus:border-[#2c2c2c] focus:bg-white focus:shadow-[0_0_5px_rgba(44,44,44,0.1)] rounded-none max-md:p-3 max-md:[-webkit-appearance:none]"
+            />
+          </div>
+        ))}
+
+        <div class="mb-[30px]">
+          <label for="message" class="block font-bold text-[14px] mb-[10px] text-[#2c2c2c]">
+            お問い合わせ内容
+            <span class="text-[10px] bg-[#2c2c2c] text-white px-[6px] py-[2px] ml-2 align-middle">必須</span>
+          </label>
+          <textarea
+            id="message"
+            name="message"
+            rows={8}
+            placeholder="ご質問やメッセージをご記入ください"
+            required
+            class="w-full p-[15px] border border-[#ddd] bg-[#fcfcfc] text-[16px] transition-all duration-300 focus:outline-none focus:border-[#2c2c2c] focus:bg-white focus:shadow-[0_0_5px_rgba(44,44,44,0.1)] resize-y rounded-none max-md:p-3 max-md:[-webkit-appearance:none]"
+          ></textarea>
+        </div>
+
+        <div class="text-center mt-[50px] max-md:mt-10">
+          <button
+            type="submit"
+            id="submit-btn"
+            class="bg-[#2c2c2c] text-white px-[60px] py-5 border-none cursor-pointer text-[16px] tracking-[0.1em] transition-colors duration-300 hover:bg-[#555] disabled:opacity-50 disabled:cursor-not-allowed max-md:w-full max-md:px-0 max-md:py-[18px] max-md:text-[15px]"
+          >
+            内容を確認して送信する
+          </button>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <!-- フォームバリデーション・二重送信防止JS -->
+  <script>
+    const form = document.getElementById('contact-form') as HTMLFormElement | null;
+    const submitBtn = document.getElementById('submit-btn') as HTMLButtonElement | null;
+
+    form?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+      }
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.textContent = '送信中...';
+      }
+      // ダミー：実際の送信処理はここに実装
+    });
+  </script>
+</BaseLayout>

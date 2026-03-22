@@ -1,0 +1,55 @@
+---
+import BaseHead from '../components/common/BaseHead.astro';
+import Header from '../components/common/Header.astro';
+import Footer from '../components/common/Footer.astro';
+import type { SeoMeta } from '../utils/seo';
+
+interface Props extends SeoMeta {
+  headerVariant?: 'top' | 'sub';
+  jsonLd?: object | object[];
+}
+
+const { headerVariant = 'sub', jsonLd, ...seoProps } = Astro.props;
+---
+
+<!doctype html>
+<html lang="ja">
+  <head>
+    <BaseHead {...seoProps} jsonLd={jsonLd} />
+  </head>
+  <body class="bg-base text-text leading-relaxed">
+    <Header variant={headerVariant} />
+    <main id="main-content">
+      <slot />
+    </main>
+    <Footer />
+
+    <!-- フェードインアニメーション（Intersection Observer） -->
+    <script>
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('fade-in-visible');
+              observer.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.1 }
+      );
+      document.querySelectorAll('.fade-in').forEach((el) => observer.observe(el));
+    </script>
+
+    <style is:global>
+      .fade-in {
+        opacity: 0;
+        transform: translateY(20px);
+        transition: opacity 0.6s ease, transform 0.6s ease;
+      }
+      .fade-in-visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    </style>
+  </body>
+</html>

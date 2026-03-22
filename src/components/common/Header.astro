@@ -1,0 +1,88 @@
+---
+interface Props {
+  variant?: 'top' | 'sub';
+}
+const { variant = 'sub' } = Astro.props;
+
+const navItems = [
+  { href: '/about/', ja: 'ハードパンについて', en: 'ABOUT' },
+  { href: '/news/', ja: 'お知らせ', en: 'NEWS' },
+  { href: '/menu/', ja: '商品一覧', en: 'MENU' },
+  { href: '/contact/', ja: 'お問い合わせ', en: 'CONTACT' },
+  { href: '/shop-info/', ja: '店舗情報', en: 'SHOP INFO' },
+];
+
+const isTop = variant === 'top';
+---
+
+<header
+  class:list={[
+    'w-full z-50 flex items-center transition-colors duration-400',
+    isTop
+      ? 'absolute top-0 left-0 h-[10vh] bg-[rgba(238,228,228,0.7)] backdrop-blur-[10px] border-b border-white/10'
+      : 'relative h-[10vh] bg-header border-b border-sub',
+  ]}
+  id="site-header"
+>
+  <div class="relative flex items-center w-full h-full">
+    <!-- ロゴ -->
+    <div
+      class:list={[
+        'z-[110]',
+        isTop ? 'absolute left-0 top-0 h-full flex items-center' : 'flex items-center h-full',
+      ]}
+    >
+      <a href="/" aria-label="ハードパン トップページへ">
+        <img
+          src="/images/logo.png"
+          alt="ハードパン ロゴ"
+          class:list={[
+            'object-contain block',
+            isTop ? 'h-[130px] w-[120px] object-cover' : 'h-full max-h-[13vh] w-auto pl-6',
+          ]}
+          width="120"
+          height="130"
+        />
+      </a>
+    </div>
+
+    <!-- ナビゲーション -->
+    <nav
+      class="mx-auto"
+      aria-label="メインナビゲーション"
+    >
+      <ul class="flex gap-[100px] list-none max-md:gap-[15px_20px] max-md:flex-wrap max-md:justify-center max-md:px-3">
+        {navItems.map(({ href, ja, en }) => (
+          <li>
+            <a
+              href={href}
+              class="text-text hover:text-text2 transition-colors duration-300 no-underline text-center block"
+            >
+              <span class="block text-[15px] font-bold tracking-[0.2em] text-center">{ja}</span>
+              <span class="block text-[10px] tracking-[0.1em] text-center">{en}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  </div>
+</header>
+
+{isTop && (
+  <script>
+    const header = document.getElementById('site-header');
+    const nav = header?.querySelector('nav');
+    nav?.addEventListener('mouseenter', () => {
+      if (header) {
+        header.style.backgroundColor = '#FAF9F6';
+        header.style.backdropFilter = 'blur(0px)';
+      }
+    });
+    nav?.addEventListener('mouseleave', () => {
+      if (header) {
+        header.style.backgroundColor = 'rgba(238, 228, 228, 0.7)';
+        header.style.backdropFilter = 'blur(10px)';
+      }
+    });
+  </script>
+)}

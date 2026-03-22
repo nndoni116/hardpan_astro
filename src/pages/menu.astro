@@ -1,0 +1,162 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumb from '../components/common/Breadcrumb.astro';
+import { buildSeoMeta } from '../utils/seo';
+import { menuItems, sideMenuItems, lunchSets } from '../data/menu';
+
+const seo = buildSeoMeta({
+  pageTitle: '商品一覧',
+  description: 'ハードパンの商品ラインナップ。新商品・季節限定・定番商品・ランチセットをご覧いただけます。',
+  path: '/menu/',
+});
+
+const newArrivals = menuItems.filter((m) => m.category === 'NEW_ARRIVAL');
+const seasonal = menuItems.filter((m) => m.category === 'SEASONAL');
+const standard = menuItems.filter((m) => m.category === 'STANDARD');
+const soups = sideMenuItems.filter((m) => m.type === 'SOUP');
+const drinks = sideMenuItems.filter((m) => m.type === 'DRINK');
+---
+
+<BaseLayout {...seo}>
+  <Breadcrumb items={[{ label: '商品一覧', href: '/menu/' }]} />
+
+  <!-- ヒーロー -->
+  <div class="relative w-full h-[30vh] overflow-hidden bg-[#2c2c2c]">
+    <img src="/images/menu/hero.jpg" alt="バスケットに盛られたパン" class="w-full h-full object-cover brightness-[0.7]" width="1920" height="600" loading="lazy" />
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-white text-center">
+      <h1 class="text-[28px] tracking-[0.2em]">商品一覧</h1>
+      <p class="text-[12px] uppercase tracking-[0.2em] mt-1">MENU</p>
+    </div>
+  </div>
+
+  <!-- イントロ -->
+  <section class="py-[80px] text-center fade-in max-md:py-[60px]" aria-label="メニューイントロ">
+    <div class="max-w-[1050px] mx-auto px-5">
+      <p class="text-[15px] leading-[2] text-text3 mb-5 max-md:text-[14px] max-md:text-left">
+        誤魔化しのきかない素材を使い、職人が一つひとつ手でこね、火の力で焼き上げる。<br class="max-md:hidden" />
+        私たちが追求するのは、毎日食べたくなる「力強く、優しいパン」です。
+      </p>
+      <p class="text-[15px] leading-[2] text-text3 max-md:text-[14px] max-md:text-left">
+        本格的なハードパンから、季節が香る新作まで。<br class="max-md:hidden" />
+        素材本来の旨味を凝縮した、私たちのラインナップをご紹介します。
+      </p>
+    </div>
+  </section>
+
+  <!-- メニューカテゴリ -->
+  <section class="py-[80px] max-md:py-[60px] fade-in" aria-label="メニュー一覧">
+    <div class="max-w-[1050px] mx-auto px-5">
+
+      <!-- 新商品 -->
+      <div class="mb-[100px] max-md:mb-[60px]">
+        <h2 class="text-[24px] tracking-[0.1em] border-b border-[#ddd] pb-3 mb-10 max-md:text-[20px] max-md:mb-[30px]">
+          新商品 <span class="text-[12px] text-text2 ml-3 tracking-[0.2em]">NEW ARRIVAL</span>
+        </h2>
+        <div class="grid grid-cols-3 gap-[40px_30px] max-md:grid-cols-1 max-md:gap-10">
+          {newArrivals.map((item) => (
+            <article class="text-left">
+              <img src={item.imagePath} alt={item.name} class="w-full aspect-square object-cover rounded-lg mb-4" width="300" height="300" loading="lazy" />
+              <h3 class="text-[16px] text-text mb-2 font-bold">{item.name}</h3>
+              {item.description && <p class="text-[14px] text-text3 leading-[1.8]">{item.description}</p>}
+            </article>
+          ))}
+        </div>
+      </div>
+
+      <!-- 季節限定 -->
+      <div class="mb-[100px] max-md:mb-[60px]">
+        <h2 class="text-[24px] tracking-[0.1em] border-b border-[#ddd] pb-3 mb-10 max-md:text-[20px] max-md:mb-[30px]">
+          季節限定 <span class="text-[12px] text-text2 ml-3 tracking-[0.2em]">SEASONAL</span>
+        </h2>
+        <div class="grid grid-cols-3 gap-[40px_30px] max-md:grid-cols-1 max-md:gap-10">
+          {seasonal.map((item) => (
+            <article class="text-left">
+              <img src={item.imagePath} alt={item.name} class="w-full aspect-square object-cover rounded-lg mb-4" width="300" height="300" loading="lazy" />
+              <h3 class="text-[16px] text-text mb-2 font-bold">{item.name}</h3>
+              {item.description && <p class="text-[14px] text-text3 leading-[1.8]">{item.description}</p>}
+            </article>
+          ))}
+        </div>
+      </div>
+
+      <!-- 定番商品 -->
+      <div class="mb-[100px] max-md:mb-[60px]">
+        <h2 class="text-[24px] tracking-[0.1em] border-b border-[#ddd] pb-3 mb-10 max-md:text-[20px] max-md:mb-[30px]">
+          定番商品 <span class="text-[12px] text-text2 ml-3 tracking-[0.2em]">STANDARD</span>
+        </h2>
+        <div class="grid grid-cols-3 gap-[30px_15px] max-md:grid-cols-2">
+          {standard.map((item) => (
+            <article class="text-center">
+              <img src={item.imagePath} alt={item.name} class="w-full aspect-square object-cover rounded-lg mb-3" width="300" height="300" loading="lazy" />
+              <h3 class="text-[15px] text-text max-md:text-[15px]">{item.name}</h3>
+            </article>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- スープ・ドリンク -->
+  <section class="py-[80px] bg-main fade-in max-md:py-[40px]" aria-label="スープ・ドリンク">
+    <div class="max-w-[1050px] mx-auto px-5">
+      <div class="flex gap-[60px] max-md:flex-col max-md:gap-10">
+        <div class="flex-1">
+          <h2 class="text-[22px] tracking-[0.2em] border-b-2 border-text pb-2 mb-6 inline-block">SOUP</h2>
+          <dl class="space-y-6">
+            {soups.map((item) => (
+              <div>
+                <dt class="flex justify-between text-[15px] font-bold text-text mb-1">
+                  <span>{item.name}</span>
+                  <span class="text-text2">¥{item.price.toLocaleString()}</span>
+                </dt>
+                <dd class="text-[14px] text-text3">{item.description}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+        <div class="flex-1">
+          <h2 class="text-[22px] tracking-[0.2em] border-b-2 border-text pb-2 mb-6 inline-block">DRINK</h2>
+          <dl class="space-y-6">
+            {drinks.map((item) => (
+              <div>
+                <dt class="flex justify-between text-[15px] font-bold text-text mb-1">
+                  <span>{item.name}</span>
+                  <span class="text-text2">¥{item.price.toLocaleString()}</span>
+                </dt>
+                <dd class="text-[14px] text-text3">{item.description}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ランチセット -->
+  <section class="py-[80px] fade-in max-md:py-[60px]" aria-label="ランチセット">
+    <div class="max-w-[1050px] mx-auto px-5">
+      <div class="flex flex-col items-center text-center mb-10">
+        <h2 class="text-[1.8rem] tracking-[0.1em] text-text m-0">ランチセット</h2>
+        <p class="text-[0.9rem] uppercase tracking-[0.3em] text-text2 mt-2">Lunch Set Menu</p>
+      </div>
+      <div class="grid grid-cols-3 gap-[40px_30px] max-md:grid-cols-1 max-md:gap-10">
+        {lunchSets.map((set) => (
+          <article class="text-left">
+            <div class="relative mb-4">
+              <img src={set.imagePath} alt={set.name} class="w-full aspect-video object-cover rounded-lg" width="320" height="200" loading="lazy" />
+              <span class="absolute bottom-3 right-3 bg-[#2c2c2c] text-white text-[13px] px-3 py-1">
+                ¥{set.price.toLocaleString()}
+              </span>
+            </div>
+            <h3 class="text-[16px] font-bold text-text mb-2">{set.name}</h3>
+            <p class="text-[13px] text-text3 leading-[1.8]">セット内容：{set.contents}</p>
+          </article>
+        ))}
+      </div>
+      <div class="mt-10 space-y-1 text-[13px] text-text3">
+        <p>※ランチセットは 11:30 — 14:30 (L.O. 14:00) のご提供となります。</p>
+        <p>※すべてのセットに、お飲み物（コーヒーまたは紅茶）が付きます。</p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,71 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumb from '../components/common/Breadcrumb.astro';
+import { buildSeoMeta } from '../utils/seo';
+
+const seo = buildSeoMeta({
+  pageTitle: '店舗情報',
+  description: 'ハードパンの営業時間・定休日・アクセス・駐車場情報です。石川県金沢市〇〇町1-2-3。',
+  path: '/shop-info/',
+});
+---
+
+<BaseLayout {...seo}>
+  <Breadcrumb items={[{ label: '店舗情報', href: '/shop-info/' }]} />
+
+  <div class="relative w-full h-[30vh] overflow-hidden bg-[#2c2c2c]">
+    <img src="/images/shop-info/hero.jpg" alt="お店の外観" class="w-full h-full object-cover brightness-[0.7]" width="1920" height="600" loading="lazy" />
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-white text-center">
+      <h1 class="text-[28px] tracking-[0.2em]">店舗情報</h1>
+      <p class="text-[12px] uppercase tracking-[0.2em] mt-1">SHOP INFO</p>
+    </div>
+  </div>
+
+  <section class="fade-in" aria-label="店舗情報">
+    <div class="max-w-[1050px] mx-auto px-5">
+      <div class="flex gap-[50px] py-[80px] max-md:flex-col max-md:gap-10 max-md:py-10">
+
+        <!-- 地図 -->
+        <div class="flex-1 max-md:order-1">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3202.825832703!2d136.6457123!3d36.5626084!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzbCsDMzJzQ1LjQiTiAxMzbaseAwOCczNC42IkU!5e0!3m2!1sja!2sjp!4v1234567890"
+            width="100%"
+            height="450"
+            style="border:0;"
+            allowfullscreen
+            loading="lazy"
+            title="ハードパン 地図"
+            class="max-md:h-[300px]"
+          ></iframe>
+        </div>
+
+        <!-- 店舗情報 -->
+        <div class="flex-1 max-md:order-2">
+          <div class="mb-10 max-md:mb-8 max-md:px-[10px]">
+            <h2 class="text-[20px] border-l-4 border-[#2c2c2c] pl-[15px] mb-5">店舗情報</h2>
+            <dl>
+              {[
+                { dt: '住所', dd: '〒000-0000\n石川県金沢市〇〇町 1-2-3' },
+                { dt: '電話番号', dd: '076-000-0000' },
+                { dt: '営業時間', dd: '8:00 - 18:00（売り切れ次第終了）' },
+                { dt: '店休日', dd: '日曜日・月曜日' },
+              ].map(({ dt, dd }) => (
+                <div>
+                  <dt class="font-bold mt-[15px] text-[#2c2c2c] text-[14px] max-md:text-[15px]">{dt}</dt>
+                  <dd class="text-[#555] mb-1 whitespace-pre-line text-[14px] leading-[1.6]">{dd}</dd>
+                </div>
+              ))}
+            </dl>
+          </div>
+
+          <div class="max-md:px-[10px]">
+            <h2 class="text-[20px] border-l-4 border-[#2c2c2c] pl-[15px] mb-5">駐車場のご案内</h2>
+            <p class="text-[14px] text-[#555] leading-[1.7] bg-[#f9f9f9] p-[15px] rounded-[4px]">
+              店舗横に5台分の専用駐車場がございます。満車の場合は、近隣の提携コインパーキング（〇〇パーク）をご利用ください。30分無料券をお渡しします。
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

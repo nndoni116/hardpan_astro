@@ -1,0 +1,81 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumb from '../../components/common/Breadcrumb.astro';
+import { buildSeoMeta, DEFAULT_OGP_IMAGE } from '../../utils/seo';
+import { getNewsBySlug, getAllNewsSlugs } from '../../lib/microcms';
+import { sanitizeContent } from '../../lib/sanitize';
+import { formatDate, toDatetimeAttr } from '../../utils/date';
+
+export async function getStaticPaths() {
+  const slugs = await getAllNewsSlugs();
+  return slugs.map((slug) => ({ params: { slug } }));
+}
+
+const { slug } = Astro.params as { slug: string };
+const article = await getNewsBySlug(slug);
+const sanitizedContent = sanitizeContent(article.content);
+
+const ogImage = article.thumbnail?.url ?? DEFAULT_OGP_IMAGE;
+
+const seo = buildSeoMeta({
+  pageTitle: article.title,
+  description: article.title,
+  path: `/news/${slug}/`,
+  ogImage,
+});
+
+// JSON-LD: Article
+const articleSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: article.title,
+  image: ogImage,
+  author: { '@type': 'Organization', name: 'ハードパン' },
+  publisher: { '@type': 'Organization', name: 'ハードパン' },
+  datePublished: article.publishedAt,
+  dateModified: article.updatedAt,
+};
+---
+
+<BaseLayout {...seo} jsonLd={articleSchema}>
+  <Breadcrumb items={[
+    { label: 'お知らせ', href: '/news/' },
+    { label: article.title },
+  ]} />
+
+  <article class="max-w-[800px] mx-auto px-5 py-[80px] fade-in max-md:py-[60px]">
+    <header class="mb-10">
+      <div class="flex gap-3 items-center mb-4">
+        <time datetime={toDatetimeAttr(article.publishedAt)} class="text-[13px] text-text2">
+          {formatDate(article.publishedAt)}
+        </time>
+        <span class="text-[10px] bg-[#666] text-white px-2 py-[2px] rounded-[2px]">
+          {article.category}
+        </span>
+      </div>
+      <h1 class="text-[28px] font-bold text-text leading-[1.4] max-md:text-[22px]">{article.title}</h1>
+    </header>
+
+    {article.thumbnail && (
+      <img
+        src={article.thumbnail.url}
+        alt={article.title}
+        width={article.thumbnail.width}
+        height={article.thumbnail.height}
+        class="w-full h-auto mb-10 rounded-lg"
+        loading="lazy"
+      />
+    )}
+
+    <div
+      class="prose prose-lg max-w-none text-text3 leading-[2] [&_h2]:text-[22px] [&_h2]:font-bold [&_h2]:text-text [&_h2]:mt-10 [&_h2]:mb-4 [&_p]:mb-5 [&_ul]:list-disc [&_ul]:pl-6 [&_ul]:mb-5 [&_a]:text-accent [&_a]:underline"
+      set:html={sanitizedContent}
+    />
+
+    <div class="mt-16 pt-8 border-t border-sub">
+      <a href="/news/" class="text-[13px] text-text2 hover:text-text transition-colors duration-300">
+        ← お知らせ一覧に戻る
+      </a>
+    </div>
+  </article>
+</BaseLayout>

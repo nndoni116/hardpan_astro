@@ -1,0 +1,13 @@
+# Cloudflare Pages セキュリティヘッダー設定
+# ⚠️ CSP は実際のサイト要件（外部フォントやサードパーティスクリプト等）に合わせて調整すること。
+# インラインスクリプトが必要な場合は 'unsafe-inline' の代わりにハッシュ方式 ('sha256-...') を使用すること。
+
+/*
+  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' https://fonts.gstatic.com; connect-src 'self'; frame-src https://www.google.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self'
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=()
+  Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+  Cross-Origin-Opener-Policy: same-origin
+  Cross-Origin-Resource-Policy: same-origin
